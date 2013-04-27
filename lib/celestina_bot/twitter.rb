@@ -5,11 +5,13 @@ class CelestinaBot::Twitter
 	
 	twitter_config = CelestinaBot::Config['twitter']
 	unless twitter_config.is_a?(Hash)
+		CelestinaBot::Logger.fatal "Cannot read twitter configuration"
 		$stderr.puts("Cannot read twitter configuration")
 		exit(2)
 	end
 	@@twitter_auth = Hash[CREDENTIALS.collect do |credential|
 		unless twitter_config[credential]
+			CelestinaBot::Logger.fatal "Cannot read twitter #{credential} configuration"
 			$stderr.puts("Cannot read twitter #{credential} configuration")
 			exit(3)
 		end
@@ -26,6 +28,7 @@ class CelestinaBot::Twitter
 		resource = resource.is_a?(Array) ? resource : resource.split(/\.|\//)
 		num_attempts = 0
 		begin
+			CelestinaBot::Logger.debug "Issuing #{method} request to resource #{resource.join('/')} with parameters #{parameters.inspect}"
 			num_attempts += 1
 			@twitter_client.send(method) do
 				resource[0..-2].inject(self) do |req, node|
@@ -34,13 +37,12 @@ class CelestinaBot::Twitter
 			end
 		rescue Grackle::TwitterError => error
 			if num_attempts <= API_MAX_ATTEMPTS
-				puts error.message
 				rate_limit_reset = if @twitter_client.response.headers["X-Rate-Limit-Remaining"] == '0'
 					@twitter_client.response.headers["X-Rate-Limit-Reset"]
 				end
 				rate_limit_reset and (wake_up_time = Time.at(rate_limit_reset.to_i))
 				if rate_limit_reset and wake_up_time > Time.now
-					puts "Retrying at #{wake_up_time}"
+					CelestinaBot::Logger.warn "#{error.message}. Retrying at #{wake_up_time}"
 					sleep (wake_up_time - Time.now).ceil
 					retry
 				else

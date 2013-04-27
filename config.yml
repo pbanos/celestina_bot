@@ -3,6 +3,9 @@ twitter:
   consumer_secret: YOUR_CONSUMER_SECRET
   token: YOUR_OAUTH_TOKEN
   token_secret: YOUR_OAUTH_TOKEN_SECRET
+log:
+  file: STDOUT # /var/log/celestina_bot.log
+  level: debug
 match_introductions:
 - "%{calixto} You should ask %{melibea} out"
 - "I think %{calixto} and %{melibea} are a really good match"

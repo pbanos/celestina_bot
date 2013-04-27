@@ -6,5 +6,6 @@ require 'daemons'
 
 Daemons.run_proc('celestina_bot') do
 	puts "Starting celestina_bot"
+	CelestinaBot::Logger.info "Starting celestina_bot"
 	CelestinaBot.work
 end

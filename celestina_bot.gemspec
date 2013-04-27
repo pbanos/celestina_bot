@@ -22,4 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_dependency 'grackle', '~> 0.3.0'
   spec.add_dependency 'daemons', '~> 1.1.9'
+  spec.add_dependency 'yell', '~> 1.3.0'
 end
