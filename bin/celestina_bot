@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", "lib")))
+require 'celestina_bot'
+require 'daemons'
+
+Daemons.run_proc('celestina_bot') do
+	puts "Starting celestina_bot"
+	CelestinaBot.work
+end

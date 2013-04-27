@@ -2,11 +2,13 @@ PATH
   remote: .
   specs:
     celestina_bot (0.0.1)
+      daemons (~> 1.1.9)
       grackle (~> 0.3.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    daemons (1.1.9)
     grackle (0.3.0)
       json
       mime-types
