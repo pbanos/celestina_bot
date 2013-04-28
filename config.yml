@@ -6,6 +6,10 @@ twitter:
 log:
   file: STDOUT # /var/log/celestina_bot.log
   level: debug
+schedule:
+  from: '9:00'
+  to: '20:00'
+  every: 60 #minutes
 match_introductions:
 - "%{calixto} You should ask %{melibea} out"
 - "I think %{calixto} and %{melibea} are a really good match"

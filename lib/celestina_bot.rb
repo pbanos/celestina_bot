@@ -3,12 +3,14 @@ require "celestina_bot/config"
 require "celestina_bot/logger"
 require "celestina_bot/twitter"
 require 'celestina_bot/match'
+require 'celestina_bot/schedule'
 
 module CelestinaBot
 	def self.work
 		match_maker = CelestinaBot::Match::Maker.new
 		loop do
 			CelestinaBot::Logger.debug "Matchmaking starts..."
+			next_time = CelestinaBot::Schedule.next_time
 			begin
 				match = match_maker.make_match
 				#if match
@@ -17,8 +19,10 @@ module CelestinaBot
 			rescue Grackle::TwitterError => e
 				CelestinaBot::Logger.error e.message
 			end
-			CelestinaBot::Logger.debug "Back to sleep for 60 seconds"
-			sleep 60
+			if (seconds_to_sleep = next_time - Time.now) > 0
+				CelestinaBot::Logger.debug "Back to sleep until #{next_time}"
+				sleep(seconds_to_sleep)
+			end
 		end
 	end
 end
