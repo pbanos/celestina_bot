@@ -13,9 +13,11 @@ module CelestinaBot
 			next_time = CelestinaBot::Schedule.next_time
 			begin
 				match = match_maker.make_match
-				#if match
-				#	CelestinaBot::Logger.info "Match made: #{[match.calixto, match.melibea].collect(&:screen_name).inspect}"
-				#end
+				if match
+					match_maker.introduce(match)
+				else
+					CelestinaBot::Logger.debug "Match could not be made, will try later"
+				end
 			rescue Grackle::TwitterError => e
 				CelestinaBot::Logger.error e.message
 			end
